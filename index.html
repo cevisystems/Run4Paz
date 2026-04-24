@@ -1,115 +1,552 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrera CeviSystems</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run4Paz</title>
 
-    header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; color: white; z-index: 1000; }
-    header a { color: white; text-decoration: none; margin-left: 15px; }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .hero { height: 100vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5') no-repeat center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
-    .hero h1 { font-size: 3.5rem; font-weight: 700; }
-    .hero p { font-size: 1.6rem; margin: 15px 0; }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .counter { font-size: 2.2rem; margin-bottom: 10px; background: rgba(0,0,0,0.6); padding: 12px 25px; border-radius: 10px; }
-    .live { font-size: 1.2rem; margin-bottom: 20px; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
 
-    .btn { background: #ff4d4d; padding: 15px 30px; border-radius: 30px; color: white; text-decoration: none; }
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
 
-    .section { padding: 80px 20px; text-align: center; background: #f5f5f5; color: #222; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-    .card { background: white; padding: 20px; border-radius: 10px; width: 250px; }
+        .logo img {
+            height: 55px;
+        }
 
-    /* VIDEO CAUSA */
-    .cause { position: relative; height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; overflow: hidden; }
-    .cause video { position: absolute; width: 100%; height: 100%; object-fit: cover; }
-    .cause::after { content: ''; position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-    .cause-content { position: relative; z-index: 2; max-width: 800px; opacity: 0; transform: translateY(40px); transition: 1s; }
-    .cause-content.show { opacity: 1; transform: translateY(0); }
+        header a {
+            color: #0d3b66;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 500;
+        }
 
-    .progress-bar { width: 100%; background: rgba(255,255,255,0.3); border-radius: 20px; overflow: hidden; margin-top: 15px; }
-    .progress-fill { height: 20px; width: 0%; background: #00ff99; }
+        /* HERO */
+        .hero {
+            height: 100vh;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.75)),
+                url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5') no-repeat center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
 
-    /* CARRUSEL */
-    .carousel { max-width: 900px; margin: auto; overflow: hidden; }
-    .slides { display: flex; transition: transform .5s; }
-    .slide { min-width: 100%; }
-    .slide iframe { width: 100%; height: 400px; }
+        .hero-logo {
+            width: 300px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 18px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            animation: fadeInLogo 1s ease forwards;
+        }
 
-    /* FORM */
-    .form-section { background: #111; color: white; padding: 80px 20px; text-align: center; }
-    form { max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 10px; }
-    input, select { padding: 12px; border-radius: 5px; border: none; }
+        @keyframes fadeInLogo {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
-    @media(max-width:768px){ .hero h1{font-size:2.2rem;} .slide iframe{height:250px;} }
-  </style>
+        .hero h1 {
+            font-size: 3rem;
+            color: #0d3b66;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .counter {
+            font-size: 2rem;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* BOTONES */
+        .btn {
+            background: linear-gradient(45deg, #0d3b66, #4CAF50);
+            padding: 15px 30px;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+            transition: .3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: #eee;
+            color: #0d3b66;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 80px 20px;
+            text-align: center;
+            background: #f5f5f5;
+        }
+
+        .benefits {
+            padding: 80px 20px;
+            text-align: center;
+            background: white;
+        }
+
+        .access {
+            background: #e8f5e9;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        /* Scroll margin general para todas las secciones con ID */
+        section[id] {
+            scroll-margin-top: 80px;
+        }
+
+        /* INFO CARRERA */
+        .info-carrera {
+            padding: 60px 20px;
+            background: #f0f4f8;
+            text-align: center;
+        }
+
+        .info-detalles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .info-detalles div {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+        }
+
+        .info-detalles strong {
+            display: block;
+            font-size: 1.1rem;
+            color: #0d3b66;
+            margin-bottom: 5px;
+        }
+
+        /* MAPA */
+        .mapa-container {
+            margin-top: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mapa-container iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            display: block;
+        }
+
+        /* CAUSA */
+        .cause {
+            position: relative;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .cause video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cause::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .cause-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* DONACION */
+        .donation {
+            padding: 80px 20px;
+            text-align: center;
+            background: white;
+        }
+
+        .progress-bar {
+            width: 80%;
+            max-width: 500px;
+            margin: 20px auto;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(45deg, #0d3b66, #4CAF50);
+        }
+
+        /* CAROUSEL */
+        .carousel {
+            max-width: 900px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform .5s;
+        }
+
+        .slide {
+            min-width: 100%;
+        }
+
+        .slide iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        /* SPONSORS */
+        .sponsors {
+            padding: 100px 0;
+            background: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .sponsor-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .sponsor-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 25s linear infinite;
+        }
+
+        .sponsor {
+            flex: 0 0 auto;
+            margin: 0 60px;
+        }
+
+        .sponsor img {
+            max-width: 150px;
+            opacity: 0.7;
+            transition: .3s;
+        }
+
+        .sponsor img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* FORM */
+        .form-section {
+            background: #0d3b66;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        /* WHATSAPP */
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            font-size: 28px;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            z-index: 999;
+            transition: .3s;
+        }
+
+        .whatsapp:hover {
+            transform: scale(1.1);
+        }
+
+        /* MOBILE */
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .slide iframe {
+                height: 250px;
+            }
+
+            .hero-logo {
+                width: 200px;
+            }
+
+            .info-detalles div {
+                min-width: 130px;
+            }
+
+            .mapa-container iframe {
+                height: 250px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<header>
-  <div><strong>CeviSystems</strong></div>
-  <nav>
-    <a href="#">Inicio</a>
-    <a href="#registro">Registro</a>
-  </nav>
-</header>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo Run4Paz">
+            <strong style="color:#0d3b66;">Run4Paz</strong>
+        </div>
+        <nav>
+            <a href="#">Inicio</a>
+            <a href="#registro">Registro</a>
+        </nav>
+    </header>
 
-<section class="hero">
-  <h1>Carrera CeviSystems 2026</h1>
-  <p>¡Corre, disfruta y rompe tus límites!</p>
-  <div class="counter" id="counter">0 inscritos</div>
-  <div class="live" id="liveInfo">🔥 5 lugares disponibles • ⏳ 12 viendo ahora</div>
-  <a href="#registro" class="btn">Inscríbete ahora</a>
-</section>
+    <!-- HERO -->
+    <section class="hero">
+        <img src="logo.png" alt="Logo" class="hero-logo">
+        <h1>Carrera Run4Paz 2027</h1>
+        <p>Corre. Ayuda. Transforma vidas.</p>
 
-<section class="cause">
-  <video autoplay muted loop>
-    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-  </video>
-  <div class="cause-content" id="causeContent">
-    <h2>💛 Corre por quienes más lo necesitan</h2>
-    <p>Cada paso cambia vidas.</p>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div id="progressText">$0 recaudados</div>
-  </div>
-</section>
+        <div class="counter" id="counter">0 inscritos</div>
 
-<section class="section">
-  <h2>Experiencias reales</h2>
-  <div class="carousel">
-    <div class="slides" id="slides">
-      <div class="slide"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe></div>
-      <div class="slide"><iframe src="https://www.youtube.com/embed/3GwjfUFyY6M"></iframe></div>
-      <div class="slide"><iframe src="https://www.youtube.com/embed/V-_O7nl0Ii0"></iframe></div>
-    </div>
-  </div>
-</section>
+        <div>
+            <a href="#registro" class="btn">Inscribirme ahora</a>
+            <a href="#inclusion" class="btn btn-secondary">Ver causa</a>
+        </div>
+    </section>
 
-<section class="form-section" id="registro">
-  <h2>Registro</h2>
-  <form>
-    <input type="text" placeholder="Nombre completo" required>
-    <input type="email" placeholder="Correo" required>
-    <select><option>5K</option><option>10K</option></select>
-    <button class="btn">Registrarme</button>
-  </form>
-</section>
+    <!-- BENEFICIOS -->
+    <section class="benefits">
+        <h2>¿Por qué correr con nosotros?</h2>
+        <p>✔ Apoyas a niños con discapacidad visual</p>
+        <p>✔ Vives una experiencia única</p>
+    </section>
 
-<script>
-let count=0;setInterval(()=>{count+=Math.floor(Math.random()*3);document.getElementById('counter').innerText=count+' inscritos';},2000);
+    <!-- ACCESO - "Inclusión para todos" -->
+    <section class="access" id="inclusion">
+        <h2>Inclusión para todos</h2>
+        <p>Contamos con guías especializados</p>
 
-const observer=new IntersectionObserver(e=>{if(e[0].isIntersecting)document.getElementById('causeContent').classList.add('show');});observer.observe(document.getElementById('causeContent'));
 
-let progress=0,goal=50000;setInterval(()=>{progress+=Math.random()*2000;if(progress>goal)progress=goal;document.getElementById('progressFill').style.width=(progress/goal*100)+'%';document.getElementById('progressText').innerText='$'+Math.floor(progress)+' recaudados';},3000);
+        <!-- CAUSA -->
+        <section class="cause" id="cause">
+            <video autoplay muted loop playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4">
+            </video>
+            <div class="cause-content">
+                <h2>💛 Cada paso cambia vidas</h2>
+            </div>
+        </section>
 
-let i=0;const slides=document.getElementById('slides');const total=slides.children.length;setInterval(()=>{i=(i+1)%total;slides.style.transform=`translateX(-${i*100}%)`;},4000);
-</script>
+    </section>
+
+    <!-- ✅ NUEVA SECCIÓN: Detalles del evento + Mapa -->
+    <section class="info-carrera">
+        <h2>📅 Detalles del evento</h2>
+        <div class="info-detalles">
+            <div><strong>🗓️ Fecha:</strong> 15 de mayo, 2027</div>
+            <div><strong>⏰ Hora:</strong> 8:00 AM</div>
+            <div><strong>📍 Lugar:</strong> Parque Metropolitano</div>
+            <div><strong>💰 Costo:</strong> $250 MXN</div>
+        </div>
+
+        <!-- Mapa interactivo de Google Maps -->
+        <div class="mapa-container">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.567529465562!2d-99.137550684905!3d19.42939698689397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff2c42e293d3%3A0xfdc004a064199d5e!2sParque%20Metropolitano%20de%20Pachuca!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- DONACION -->
+    <section class="donation">
+        <h2>Meta de donación</h2>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <p>$20,441 recaudados</p>
+        <a href="#" class="btn">Donar ahora</a>
+    </section>
+
+    <!-- EXPERIENCIAS -->
+    <section class="section">
+        <h2>Experiencias reales</h2>
+        <div class="carousel">
+            <div class="slides" id="slides">
+                <div class="slide">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>
+                </div>
+                <div class="slide">
+                    <iframe src="https://www.youtube.com/embed/3GwjfUFyY6M"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPONSORS -->
+    <section class="sponsors">
+        <h2>Patrocinadores</h2>
+        <div class="sponsor-wrapper">
+            <div class="sponsor-track">
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
+                        alt="Nike"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"
+                        alt="Adidas"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+                        alt="Microsoft"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                        alt="Apple"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
+                        alt="Nike"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"
+                        alt="Adidas"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+                        alt="Microsoft"></div>
+                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                        alt="Apple"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM -->
+    <section class="form-section" id="registro">
+        <h2>Registro</h2>
+        <form>
+            <input type="text" placeholder="Nombre completo">
+            <input type="email" placeholder="Correo">
+            <select>
+                <option>5K</option>
+                <option>10K</option>
+            </select>
+            <button type="button" class="btn"
+                onclick="alert('Gracias por registrarte. Pronto recibirás un correo de confirmación.')">Registrarme</button>
+        </form>
+    </section>
+
+    <!-- WHATSAPP -->
+    <a href="https://wa.me/5210000000000" class="whatsapp">💬</a>
+
+    <script>
+        let count = 500;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 5) + 1;
+            document.getElementById('counter').innerText = count + ' inscritos';
+        }, 1500);
+
+        // carrusel
+        let i = 0;
+        const slides = document.getElementById('slides');
+        const total = slides.children.length;
+
+        setInterval(() => {
+            i = (i + 1) % total;
+            slides.style.transform = `translateX(-${i * 100}%)`;
+        }, 4000);
+    </script>
 
 </body>
+
 </html>
