@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago fallido - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .fail-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+        .fail-card {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        .fail-icon {
+            font-size: 5rem;
+        }
+        .fail-title {
+            color: var(--error);
+            margin: 1rem 0;
+        }
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+        }
+        .help-options {
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg-gray);
+            border-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body>
+    <div class="fail-container">
+        <div class="fail-card">
+            <div class="fail-icon">❌</div>
+            <h1 class="fail-title">Pago no completado</h1>
+            <p>Hubo un problema al procesar tu pago.</p>
+            
+            <div class="error-message" id="error-message">
+                El pago no pudo ser procesado. Por favor, intenta nuevamente.
+            </div>
+
+            <div class="help-options">
+                <h3>🔍 Posibles causas:</h3>
+                <ul>
+                    <li>Saldo insuficiente en tu tarjeta/cuenta</li>
+                    <li>Datos de tarjeta incorrectos</li>
+                    <li>Problemas de conexión con el banco</li>
+                    <li>Límite de seguridad excedido</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="pago.html" class="btn-primary">Intentar nuevamente</a>
+                <a href="index.html" class="btn-secondary">Volver al inicio</a>
+                <a href="https://wa.me/521234567890" class="btn-secondary" target="_blank">Contactar soporte</a>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <p style="font-size: 0.85rem;">
+                    Si el cargo apareció en tu estado de cuenta, <br>
+                    <a href="#" onclick="reportIssue()">reporta el problema aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const message = urlParams.get('message');
+        
+        if (message) {
+            document.getElementById('error-message').innerHTML = message;
+        }
+        
+        function reportIssue() {
+            alert('Por favor contacta a soporte al 55 1234 5678 o por WhatsApp');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        .payment-container {
+            max-width: 500px;
+            margin: 120px auto 50px;
+            padding: 2rem;
+        }
+        .payment-summary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .payment-summary h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        .payment-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .payment-method-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .payment-method-card:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        .payment-method-card.selected {
+            border-color: var(--secondary-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .payment-method-icon {
+            font-size: 2rem;
+        }
+        .payment-method-info {
+            flex: 1;
+        }
+        .payment-method-name {
+            font-weight: 600;
+        }
+        .secure-badge {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--bg-gray);
+            border-radius: var(--border-radius);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .loading-payment {
+            text-align: center;
+            padding: 2rem;
+        }
+        .qr-payment {
+            text-align: center;
+            padding: 2rem;
+        }
+        .qr-payment img {
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="RUN4PAZ">
+            <span>RUN4PAZ</span>
+        </div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="inscripcion.html">Inscríbete</a>
+            <a href="panel.html">Mi cuenta</a>
+        </nav>
+    </header>
+
+    <main class="payment-container">
+        <div class="payment-summary">
+            <h3>🏃‍♂️ Tu inscripción RUN4PAZ</h3>
+            <p id="referencia-text">Folio: <strong id="folio-display">-</strong></p>
+            <div class="payment-amount" id="payment-amount">$0 MXN</div>
+            <p>Pago seguro vía MercadoPago</p>
+        </div>
+
+        <div class="payment-methods" id="payment-methods">
+            <div class="payment-method-card" data-method="credit_card">
+                <div class="payment-method-icon">💳</div>
+                <div class="payment-method-info">
+                    <div class="payment-method-name">Tarjeta de crédito/débito</div>
+                    <div class="payment-method-desc">Visa, Mastercard, American Express</div>
+                </div>
+            </div>
+            <div class="payment-method-card" data-method="mercadopago">
+                <div class="payment-method-icon">🟡</div>
+                <div class="payment-method-info">
+                    <div class="payment-method-name">Mercado Pago</div>
+                    <div class="payment-method-desc">Paga con tu cuenta de Mercado Pago</div>
+                </div>
+            </div>
+            <div class="payment-method-card" data-method="oxxo">
+                <div class="payment-method-icon">🏪</div>
+                <div class="payment-method-info">
+                    <div class="payment-method-name">OXXO</div>
+                    <div class="payment-method-desc">Paga en efectivo en cualquier OXXO</div>
+                </div>
+            </div>
+            <div class="payment-method-card" data-method="bank_transfer">
+                <div class="payment-method-icon">🏦</div>
+                <div class="payment-method-info">
+                    <div class="payment-method-name">Transferencia bancaria</div>
+                    <div class="payment-method-desc">SPEI / Transferencia</div>
+                </div>
+            </div>
+        </div>
+
+        <button id="pay-button" class="btn-primary" style="width: 100%; justify-content: center;">
+            💳 Pagar ahora
+        </button>
+
+        <div class="secure-badge">
+            🔒 Transacción 100% segura<br>
+            Tus datos están protegidos con encriptación SSL
+        </div>
+    </main>
+
+    <!-- Modal de pago con OXXO -->
+    <div id="oxxoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('oxxoModal')">&times;</span>
+            <h2>Pago en OXXO</h2>
+            <div class="qr-payment" id="oxxo-info">
+                <p>Tu código de barras para pagar en OXXO:</p>
+                <img id="oxxo-barcode" src="" alt="Código de barras">
+                <p><strong>Referencia:</strong> <span id="oxxo-reference">-</span></p>
+                <p>Vence en: <span id="oxxo-expiry">-</span></p>
+                <button class="btn-primary" onclick="copyReference()">📋 Copiar referencia</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>RUN4PAZ</h4>
+                <p>Corriendo por un mejor futuro</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@run4paz.com</p>
+                <p>Tel: 55 1234 5678</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let selectedMethod = 'credit_card';
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Seleccionar método de pago
+        document.querySelectorAll('.payment-method-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedMethod = card.dataset.method;
+            });
+        });
+
+        // Procesar pago
+        document.getElementById('pay-button').addEventListener('click', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const folio = urlParams.get('folio');
+            const carrito = urlParams.get('carrito');
+            const total = urlParams.get('total');
+            
+            let referencia = folio;
+            let textoReferencia = "Folio";
+            
+            if (carrito && total) {
+                referencia = carrito;
+                textoReferencia = "Carrito";
+                document.getElementById('referencia-text').innerHTML = `Carrito: <strong>${carrito}</strong>`;
+            }
+            
+            if (!referencia || !total) {
+                if (window.app && window.app.showNotification) {
+                    window.app.showNotification('Error: No se encontró información del pago', 'error');
+                } else {
+                    alert('Error: No se encontró información del pago');
+                }
+                return;
+            }
+
+            if (window.app && window.app.showLoading) window.app.showLoading();
+
+            try {
+                if (selectedMethod === 'oxxo') {
+                    // Generar pago OXXO
+                    const response = await window.app.apiCall('createOxxoPayment', {
+                        folio: referencia,
+                        amount: total
+                    });
+                    
+                    if (response.barcode) {
+                        document.getElementById('oxxo-barcode').src = response.barcode;
+                        document.getElementById('oxxo-reference').textContent = response.reference;
+                        document.getElementById('oxxo-expiry').textContent = response.expiry_date;
+                        document.getElementById('oxxoModal').style.display = 'flex';
+                        if (window.app && window.app.showNotification) {
+                            window.app.showNotification('Instrucciones de pago generadas', 'success');
+                        }
+                    }
+                } else {
+                    // Pago con tarjeta o MercadoPago
+                    const response = await window.app.apiCall('createPayment', {
+                        folio: referencia,
+                        amount: total,
+                        payment_method: selectedMethod
+                    });
+                    
+                    if (response.init_point) {
+                        window.location.href = response.init_point;
+                    }
+                }
+            } catch (error) {
+                if (window.app && window.app.showNotification) {
+                    window.app.showNotification('Error al procesar el pago', 'error');
+                }
+            } finally {
+                if (window.app && window.app.hideLoading) window.app.hideLoading();
+            }
+        });
+
+        function copyReference() {
+            const reference = document.getElementById('oxxo-reference').textContent;
+            navigator.clipboard.writeText(reference);
+            if (window.app && window.app.showNotification) {
+                window.app.showNotification('Referencia copiada', 'success');
+            }
+        }
+
+        // Verificar parámetros en URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const folio = urlParams.get('folio');
+        const carrito = urlParams.get('carrito');
+        const total = urlParams.get('total');
+        
+        if (carrito && total) {
+            document.getElementById('folio-display').textContent = carrito;
+            document.getElementById('payment-amount').textContent = `$${total} MXN`;
+            document.getElementById('referencia-text').innerHTML = `Carrito: <strong>${carrito}</strong>`;
+        } else if (folio && total) {
+            document.getElementById('folio-display').textContent = folio;
+            document.getElementById('payment-amount').textContent = `$${total} MXN`;
+            document.getElementById('referencia-text').innerHTML = `Folio: <strong>${folio}</strong>`;
+        } else {
+            const savedFolio = localStorage.getItem('run4paz_folio');
+            const savedTotal = localStorage.getItem('run4paz_total');
+            if (savedFolio && savedTotal) {
+                document.getElementById('folio-display').textContent = savedFolio;
+                document.getElementById('payment-amount').textContent = `$${savedTotal} MXN`;
+            }
+        }
+    </script>
+</body>
+</html>

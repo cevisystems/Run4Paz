@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaciones - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        .donation-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 120px 5% 60px;
+            margin-bottom: 2rem;
+        }
+        .donation-hero h1 {
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+        .donation-hero h1::after {
+            background: white;
+        }
+        .donation-container {
+            max-width: 1200px;
+            margin: -50px auto 0;
+            padding: 2rem;
+        }
+        .donation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .donation-card {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        .impact-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+        .donation-amounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .amount-btn {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        .amount-btn:hover, .amount-btn.active {
+            border-color: var(--secondary-color);
+            background: var(--secondary-color);
+            color: white;
+        }
+        .custom-amount {
+            margin: 1rem 0;
+        }
+        .custom-amount input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .donor-info {
+            margin: 1.5rem 0;
+        }
+        .donor-info input,
+        .donor-info select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+        }
+        .anonymous-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .impact-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        .impact-stat {
+            text-align: center;
+        }
+        .impact-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .donation-methods {
+            margin: 1.5rem 0;
+        }
+        .method-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .method-option:hover, .method-option.selected {
+            border-color: var(--secondary-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .method-icon {
+            font-size: 1.5rem;
+        }
+        .testimonials {
+            margin-top: 3rem;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .testimonial-card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .donation-footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--bg-gray);
+            border-radius: var(--border-radius);
+        }
+        @media (max-width: 768px) {
+            .donation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="RUN4PAZ">
+            <span>RUN4PAZ</span>
+        </div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="inscripcion.html">Inscríbete</a>
+            <a href="panel.html">Mi cuenta</a>
+            <a href="donacion.html" style="color: var(--secondary-color);">Donar</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="donation-hero">
+            <h1>💛 Tu donación transforma vidas</h1>
+            <p>Cada paso cuenta, cada donación ayuda</p>
+        </div>
+
+        <div class="donation-container">
+            <div class="donation-grid">
+                <!-- Columna izquierda: Formulario de donación -->
+                <div class="donation-card">
+                    <h3>Haz tu donación</h3>
+                    <p>Elige el monto que deseas donar</p>
+                    
+                    <div class="donation-amounts">
+                        <button class="amount-btn" data-amount="50">$50</button>
+                        <button class="amount-btn" data-amount="100">$100</button>
+                        <button class="amount-btn" data-amount="250">$250</button>
+                        <button class="amount-btn" data-amount="500">$500</button>
+                    </div>
+                    
+                    <div class="custom-amount">
+                        <input type="number" id="custom-amount" placeholder="Otro monto (MXN)" min="10" step="10">
+                    </div>
+                    
+                    <div class="donor-info">
+                        <h4>Tus datos</h4>
+                        <input type="text" id="donor-name" placeholder="Nombre completo (opcional)">
+                        <input type="email" id="donor-email" placeholder="Correo electrónico (para enviar comprobante)">
+                        <select id="donor-country">
+                            <option value="MX">México</option>
+                            <option value="US">Estados Unidos</option>
+                            <option value="ES">España</option>
+                            <option value="CO">Colombia</option>
+                            <option value="AR">Argentina</option>
+                            <option value="PE">Perú</option>
+                        </select>
+                    </div>
+                    
+                    <label class="anonymous-check">
+                        <input type="checkbox" id="anonymous-donation">
+                        Donar de forma anónima (no aparecerá en el muro de donantes)
+                    </label>
+                    
+                    <div class="donation-methods">
+                        <h4>Método de pago</h4>
+                        <div class="method-option" data-method="card">
+                            <span class="method-icon">💳</span>
+                            <span>Tarjeta de crédito/débito</span>
+                        </div>
+                        <div class="method-option" data-method="mercadopago">
+                            <span class="method-icon">🟡</span>
+                            <span>Mercado Pago</span>
+                        </div>
+                        <div class="method-option" data-method="paypal">
+                            <span class="method-icon">💙</span>
+                            <span>PayPal</span>
+                        </div>
+                        <div class="method-option" data-method="oxxo">
+                            <span class="method-icon">🏪</span>
+                            <span>OXXO (efectivo)</span>
+                        </div>
+                    </div>
+                    
+                    <button id="donate-btn" class="btn-primary" style="width: 100%; margin-top: 1rem;">
+                        💝 Donar ahora
+                    </button>
+                    
+                    <p style="font-size: 0.8rem; text-align: center; margin-top: 1rem; color: var(--text-light);">
+                        🔒 Transacción 100% segura vía MercadoPago
+                    </p>
+                </div>
+
+                <!-- Columna derecha: Impacto y testimonios -->
+                <div>
+                    <div class="donation-card impact-card">
+                        <h3>✨ Tu impacto</h3>
+                        <div class="impact-stats">
+                            <div class="impact-stat">
+                                <div class="impact-number" id="total-donations">$0</div>
+                                <div>Recaudados</div>
+                            </div>
+                            <div class="impact-stat">
+                                <div class="impact-number" id="total-donors">0</div>
+                                <div>Donantes</div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="donation-progress" style="width: 0%;"></div>
+                            </div>
+                            <p style="text-align: center; margin-top: 0.5rem;">
+                                Meta: <strong>$100,000 MXN</strong>
+                            </p>
+                        </div>
+                        <p style="margin-top: 1rem;">
+                            <strong>¿A dónde va tu dinero?</strong><br>
+                            • 60% - Apoyo a niños con discapacidad visual 👁️<br>
+                            • 20% - Equipo y materiales deportivos 🏃<br>
+                            • 10% - Operación del evento 🎯<br>
+                            • 10% - Gastos administrativos 📋
+                        </p>
+                    </div>
+
+                    <div class="donation-card">
+                        <h3>🏆 Muro de donantes</h3>
+                        <div id="donors-wall" style="max-height: 300px; overflow-y: auto;">
+                            <p style="text-align: center; color: var(--text-light);">Cargando donantes...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonios -->
+            <div class="testimonials">
+                <h3 style="text-align: center;">Historias que inspiran</h3>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Gracias a donaciones como estas, mi hijo pudo recibir su primer bastón blanco. ¡Correré por él!"</p>
+                        <p class="testimonial-author">- María G., mamá de Santiago</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"El año pasado participé con guía. Este año corro SOLO gracias a su apoyo. ¡Los quiero mucho!"</p>
+                        <p class="testimonial-author">- Carlos R., participante</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Cada donación es un paso hacia un mundo más inclusivo. ¡Sigan así!"</p>
+                        <p class="testimonial-author">- Fundación Ver bien</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer de donación -->
+            <div class="donation-footer">
+                <h4>💪 ¿Sabías que?</h4>
+                <p>Con $500 pesos puedes financiar una sesión de terapia visual para un niño.<br>
+                Con $1,000 pesos puedes donar un bastrón blanco completo.<br>
+                ¡Cada peso cuenta y transforma vidas!</p>
+                <p style="margin-top: 1rem;">
+                    <strong>¿Preguntas sobre donaciones?</strong><br>
+                    <a href="https://wa.me/521234567890" target="_blank">Contáctanos por WhatsApp</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de donación exitosa -->
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('successModal')">&times;</span>
+            <div style="text-align: center;">
+                <span style="font-size: 4rem;">💝</span>
+                <h2>¡Gracias por tu donación!</h2>
+                <p>Tu generosidad ayuda a transformar vidas.</p>
+                <div id="donation-details" style="margin: 1rem 0;"></div>
+                <p>Hemos enviado un comprobante a tu correo.</p>
+                <button class="btn-primary" onclick="closeModal('successModal'); location.reload();">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de pago OXXO -->
+    <div id="oxxoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('oxxoModal')">&times;</span>
+            <h2>Pago en OXXO</h2>
+            <div style="text-align: center;">
+                <p>Tu código de barras para pagar en OXXO:</p>
+                <img id="oxxo-barcode" src="" alt="Código de barras" style="max-width: 200px; margin: 1rem auto;">
+                <p><strong>Referencia:</strong> <span id="oxxo-reference">-</span></p>
+                <p>Vence en: <span id="oxxo-expiry">-</span></p>
+                <button class="btn-primary" onclick="copyReference()">📋 Copiar referencia</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>RUN4PAZ</h4>
+                <p>Corriendo por un mejor futuro</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@run4paz.com</p>
+                <p>Tel: 55 1234 5678</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let selectedAmount = 100;
+        let selectedMethod = 'card';
+        
+        // Selección de montos
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedAmount = parseInt(btn.dataset.amount);
+                document.getElementById('custom-amount').value = '';
+            });
+        });
+        
+        // Monto personalizado
+        document.getElementById('custom-amount').addEventListener('input', (e) => {
+            if (e.target.value) {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                selectedAmount = parseInt(e.target.value);
+            }
+        });
+        
+        // Selección de método de pago
+        document.querySelectorAll('.method-option').forEach(method => {
+            method.addEventListener('click', () => {
+                document.querySelectorAll('.method-option').forEach(m => m.classList.remove('selected'));
+                method.classList.add('selected');
+                selectedMethod = method.dataset.method;
+            });
+        });
+        
+        // Botón de donación
+        document.getElementById('donate-btn').addEventListener('click', async () => {
+            const amount = selectedAmount || parseInt(document.getElementById('custom-amount').value) || 100;
+            const name = document.getElementById('donor-name').value;
+            const email = document.getElementById('donor-email').value;
+            const country = document.getElementById('donor-country').value;
+            const anonymous = document.getElementById('anonymous-donation').checked;
+            
+            if (!email) {
+                window.app.showNotification('Por favor, ingresa tu correo electrónico', 'error');
+                return;
+            }
+            
+            if (amount < 10) {
+                window.app.showNotification('El monto mínimo de donación es $10 MXN', 'error');
+                return;
+            }
+            
+            window.app.showLoading();
+            
+            try {
+                if (selectedMethod === 'oxxo') {
+                    // Pago OXXO
+                    const response = await window.app.apiCall('createOxxoDonation', {
+                        amount: amount,
+                        name: name,
+                        email: email,
+                        country: country,
+                        anonymous: anonymous
+                    });
+                    
+                    if (response.barcode) {
+                        document.getElementById('oxxo-barcode').src = response.barcode;
+                        document.getElementById('oxxo-reference').textContent = response.reference;
+                        document.getElementById('oxxo-expiry').textContent = response.expiry_date;
+                        document.getElementById('oxxoModal').style.display = 'flex';
+                        window.app.showNotification('Instrucciones de pago generadas', 'success');
+                    }
+                } else {
+                    // Pago en línea
+                    const response = await window.app.apiCall('createDonation', {
+                        amount: amount,
+                        name: name,
+                        email: email,
+                        country: country,
+                        anonymous: anonymous,
+                        payment_method: selectedMethod
+                    });
+                    
+                    if (response.init_point) {
+                        window.location.href = response.init_point;
+                    }
+                }
+            } catch (error) {
+                window.app.showNotification('Error al procesar la donación', 'error');
+            } finally {
+                window.app.hideLoading();
+            }
+        });
+        
+        // Cargar estadísticas de donaciones
+        async function loadDonationStats() {
+            try {
+                const stats = await window.app.apiCall('getDonationStats');
+                if (stats) {
+                    document.getElementById('total-donations').textContent = `$${stats.total.toLocaleString()}`;
+                    document.getElementById('total-donors').textContent = stats.donors;
+                    const percentage = (stats.total / 100000) * 100;
+                    document.getElementById('donation-progress').style.width = `${Math.min(percentage, 100)}%`;
+                }
+            } catch (error) {
+                console.error('Error loading donation stats:', error);
+            }
+        }
+        
+        // Cargar muro de donantes
+        async function loadDonorsWall() {
+            try {
+                const donors = await window.app.apiCall('getDonors');
+                const wall = document.getElementById('donors-wall');
+                
+                if (donors && donors.length > 0) {
+                    wall.innerHTML = donors.map(donor => `
+                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                            <span>
+                                ${donor.anonymous ? '💝 Donante anónimo' : `❤️ ${donor.name}`}
+                            </span>
+                            <span style="font-weight: 600; color: var(--secondary-color);">
+                                $${donor.amount.toLocaleString()}
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    wall.innerHTML = '<p style="text-align: center;">Sé el primer donante 💝</p>';
+                }
+            } catch (error) {
+                console.error('Error loading donors:', error);
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function copyReference() {
+            const reference = document.getElementById('oxxo-reference').textContent;
+            navigator.clipboard.writeText(reference);
+            window.app.showNotification('Referencia copiada', 'success');
+        }
+        
+        // Inicializar
+        loadDonationStats();
+        loadDonorsWall();
+        setInterval(loadDonationStats, 30000); // Actualizar cada 30 segundos
+    </script>
+</body>
+</html>

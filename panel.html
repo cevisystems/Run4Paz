@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mi Panel - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* ========== ESTILOS GENERALES ========== */
+        * {
+            box-sizing: border-box;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+            transform: none;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            border-radius: 20px;
+            margin: 0.2rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-sm-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-sm-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-sm-info {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-sm-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        /* ========== LISTA DE INSCRIPCIONES (VISTA MÓVIL) ========== */
+        .inscripciones-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .inscripcion-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .inscripcion-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .inscripcion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .inscripcion-nombre {
+            font-weight: 700;
+            color: #0d3b66;
+            font-size: 1rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-paid {
+            background: #48bb78;
+            color: white;
+        }
+
+        .badge-pending {
+            background: #ed8936;
+            color: white;
+        }
+
+        .inscripcion-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .inscripcion-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 0.25rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .inscripcion-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .inscripcion-value {
+            color: #2d3748;
+        }
+
+        .inscripcion-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ========== MODAL DE DETALLE ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 1.5rem;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: #f56565;
+        }
+
+        .modal-content h2 {
+            color: #0d3b66;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            text-align: center;
+            padding-right: 1.5rem;
+        }
+
+        .detalle-section {
+            background: #f7fafc;
+            padding: 0.75rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .detalle-section h4 {
+            color: #0d3b66;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            border-left: 3px solid #0d3b66;
+            padding-left: 0.5rem;
+        }
+
+        .detalle-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+        }
+
+        .detalle-item:last-child {
+            border-bottom: none;
+        }
+
+        .detalle-total {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0d3b66;
+            text-align: right;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-download {
+            background: #0d3b66;
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* ========== MODAL DE CONFIRMACIÓN PERSONALIZADA ========== */
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-content {
+            background-color: white;
+            margin: auto;
+            padding: 1.8rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .confirm-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirm-content h3 {
+            color: #0d3b66;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .confirm-content p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+
+        .confirm-btn-cancel {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-btn-cancel:hover {
+            background: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .confirm-btn-confirm {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-btn-confirm:hover {
+            background: #e53e3e;
+            transform: translateY(-1px);
+        }
+
+        /* ========== OTROS ESTILOS ========== */
+        .panel-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel-card {
+            width: 100%;
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner-large {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #0d3b66;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #mainContent {
+            display: none;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #edf2f7;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-menu {
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            right: 15px;
+            top: 65px;
+            z-index: 1000;
+            min-width: 160px;
+        }
+
+        .user-menu a,
+        .user-menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.6rem 1rem;
+            text-decoration: none;
+            color: #2d3748;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .user-menu a:hover,
+        .user-menu button:hover {
+            background: #f7fafc;
+        }
+
+        .logout-btn {
+            color: #f56565 !important;
+        }
+
+        footer {
+            background: #0d3b66;
+            color: white;
+            padding: 1.5rem 5% 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #4CAF50;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loadingScreen">
+        <div class="spinner-large"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="RUN4PAZ">
+            <span>RUN4PAZ</span>
+        </div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="inscripcion.html">Inscríbete</a>
+            <a href="panel.html">Mi cuenta</a>
+        </nav>
+        <div id="userBadge" class="user-badge" style="display: none;">
+            <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+            <span id="userNameDisplay" class="user-name"></span>
+        </div>
+    </header>
+
+    <div id="userMenu" class="user-menu" style="display: none;">
+        <a href="panel.html">📋 Mi panel</a>
+        <a href="inscripcion.html">🏃 Nueva inscripción</a>
+        <hr>
+        <button id="logoutBtn" class="logout-btn">🚪 Cerrar sesión</button>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADA -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3>¿Cancelar inscripción?</h3>
+            <p id="confirmMessage">¿Estás seguro de que deseas cancelar esta inscripción? Esta acción no se puede deshacer.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn-cancel" id="confirmCancelBtn">No, regresar</button>
+                <button class="confirm-btn-confirm" id="confirmAcceptBtn">Sí, cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        <main class="panel-container">
+            <div class="panel-header" style="padding: 1.5rem 5%; text-align: center;">
+                <h1 style="font-size: 1.6rem;">🏃‍♂️ Mi cuenta RUN4PAZ</h1>
+                <p style="font-size: 0.8rem;">Gestiona tus inscripciones, descarga tus comprobantes</p>
+            </div>
+            <div class="panel-content" style="padding: 0 5% 2rem;">
+                <div class="panel-grid">
+                    <!-- Tarjeta Información Personal -->
+                    <div class="panel-card" style="background: white; border-radius: 16px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📋 Mis datos</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem;">
+                            <div><strong>Nombre:</strong> <span id="nombre-participante">-</span></div>
+                            <div><strong>Email:</strong> <span id="email-participante">-</span></div>
+                            <div><strong>Teléfono:</strong> <span id="telefono-participante">-</span></div>
+                            <div><strong>Talla playera:</strong> <span id="talla-participante">-</span></div>
+                        </div>
+                        <button class="btn-secondary btn-icon" style="margin-top: 0.75rem; padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="openEditModal()">✏️ Editar datos</button>
+                    </div>
+
+                    <!-- Lista de inscripciones -->
+                    <div class="panel-card" style="background: white; border-radius: 16px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">📋 Mis inscripciones</h3>
+                        <div id="inscripciones-container" class="inscripciones-container">
+                            <p>Cargando tus inscripciones...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-actions">
+                    <button class="btn-primary btn-icon" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="window.open('inscripcion.html', '_blank')">🏃 Nueva inscripción</button>
+                    <button class="btn-primary btn-icon" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="shareOnWhatsApp()">💬 Compartir</button>
+                    <button class="btn-secondary btn-icon" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="addToCalendar()">📅 Calendario</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>RUN4PAZ</h4>
+                    <p>Corriendo por un mejor futuro</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>Email: info@run4paz.com</p>
+                    <p>Tel: 55 1234 5678</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Términos y condiciones</a>
+                    <a href="#">Aviso de privacidad</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RUN4PAZ - Todos los derechos reservados</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== MODALES ========== -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2>✏️ Editar mis datos</h2>
+            <form id="edit-form">
+                <div class="form-group"><label>Nombre completo</label><input type="text" id="edit-nombre"></div>
+                <div class="form-group"><label>Teléfono</label><input type="tel" id="edit-telefono"></div>
+                <div class="form-group"><label>Talla de playera</label><select id="edit-talla">
+                        <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+                    </select></div>
+                <button type="submit" class="btn-primary">💾 Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('detailModal')">&times;</span>
+            <h2 id="detailModalTitle">📋 Detalle de inscripción</h2>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="text-align: center; max-width: 350px;">
+            <span class="close" onclick="closeModal('successModal')">&times;</span>
+            <div style="font-size: 3rem;">✅</div>
+            <h2 style="font-size: 1.2rem;">¡Actualizado!</h2>
+            <p id="successMessage" style="font-size: 0.85rem;">Tus datos han sido actualizados correctamente</p>
+            <button class="btn-primary" onclick="closeModal('successModal')" style="padding: 0.5rem;">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        // ============ VARIABLES GLOBALES ============
+        let currentUser = null;
+        let horariosCache = {};
+
+        // Elementos DOM
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+        const userBadge = document.getElementById('userBadge');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const userAvatar = document.getElementById('userAvatar');
+        const userMenu = document.getElementById('userMenu');
+
+        // ============ MODAL DE CONFIRMACIÓN PERSONALIZADA ============
+        let currentConfirmCallback = null;
+        
+        function showConfirmModal(message, onConfirm) {
+            const modal = document.getElementById('confirmModal');
+            const messageEl = document.getElementById('confirmMessage');
+            
+            // Guardar el callback
+            currentConfirmCallback = onConfirm;
+            
+            // Configurar mensaje
+            if (messageEl) messageEl.textContent = message;
+            
+            // Mostrar modal
+            modal.style.display = 'flex';
+        }
+        
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirmModal');
+            if (modal) modal.style.display = 'none';
+            currentConfirmCallback = null;
+        }
+        
+        function onConfirmAccept() {
+            if (currentConfirmCallback) {
+                currentConfirmCallback();
+                currentConfirmCallback = null;
+            }
+            closeConfirmModal();
+        }
+        
+        function onConfirmCancel() {
+            closeConfirmModal();
+        }
+        
+        // Asignar event listeners a los botones del modal de confirmación
+        document.getElementById('confirmAcceptBtn')?.addEventListener('click', onConfirmAccept);
+        document.getElementById('confirmCancelBtn')?.addEventListener('click', onConfirmCancel);
+
+        // ============ FUNCIONES DE HORARIOS ============
+        async function obtenerHorariosPorDistancia(distanciaNombre) {
+            if (!distanciaNombre) return null;
+            if (horariosCache[distanciaNombre]) return horariosCache[distanciaNombre];
+
+            try {
+                const snapshot = await db.collection('horarios').where('distancia', '==', distanciaNombre).limit(1).get();
+                if (!snapshot.empty) {
+                    const data = snapshot.docs[0].data();
+                    horariosCache[distanciaNombre] = data;
+                    return data;
+                }
+                const horariosPorDefecto = {
+                    '3K Recreativa': { salida: '8:30 AM', premiacion: '10:00 AM' },
+                    '5K Competitiva': { salida: '8:15 AM', premiacion: '9:45 AM' },
+                    '10K Competitiva': { salida: '8:00 AM', premiacion: '9:30 AM' }
+                };
+                return horariosPorDefecto[distanciaNombre] || { salida: '8:00 AM', premiacion: '10:00 AM' };
+            } catch (error) {
+                return { salida: '8:00 AM', premiacion: '10:00 AM' };
+            }
+        }
+
+        // ============ GENERAR CONSTANCIA PDF ============
+        function generarConstancia(inscripcion) {
+            const contenido = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;">
+                    <div style="text-align: center; border-bottom: 2px solid #0d3b66; padding-bottom: 10px; margin-bottom: 20px;">
+                        <h1 style="color: #0d3b66;">RUN4PAZ</h1>
+                        <h2>Constancia de Inscripción</h2>
+                        <p>${new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Folio:</strong> ${inscripcion.folio}</p>
+                        <p><strong>Participante:</strong> ${inscripcion.participanteNombre || inscripcion.nombre}</p>
+                        <p><strong>Distancia:</strong> ${inscripcion.distanciaNombre}</p>
+                        <p><strong>Fecha de registro:</strong> ${inscripcion.pendingSince?.toDate().toLocaleDateString() || 'N/A'}</p>
+                        <p><strong>Estado:</strong> ${inscripcion.estadoPago === 'paid' ? 'PAGADO' : 'PENDIENTE'}</p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <h3>Extras contratados:</h3>
+                        <ul>
+                            ${inscripcion.extras && inscripcion.extras.length > 0 ?
+                                inscripcion.extras.map(e => `<li>${e.name} - $${e.price} MXN</li>`).join('') :
+                                '<li>Ninguno</li>'}
+                        </ul>
+                        <p><strong>Total pagado:</strong> $${inscripcion.total || 0} MXN</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc;">
+                        <p>¡Gracias por correr con nosotros!</p>
+                        <p>15 de junio, 2025 - Parque Metropolitano</p>
+                    </div>
+                </div>
+            `;
+            
+            const ventana = window.open('', '_blank');
+            ventana.document.write(contenido);
+            ventana.document.close();
+            ventana.print();
+        }
+
+        // ============ CARGAR INSCRIPCIONES ============
+        async function cargarTodasInscripciones() {
+            const container = document.getElementById('inscripciones-container');
+            if (!container) return;
+            if (!currentUser) {
+                container.innerHTML = '<p>Inicia sesión para ver tus inscripciones</p>';
+                return;
+            }
+
+            container.innerHTML = '<p>Cargando tus inscripciones...</p>';
+
+            try {
+                const snapshot = await db.collection('inscripciones')
+                    .where('userId', '==', currentUser.uid)
+                    .where('estadoPago', 'in', ['pending_payment', 'paid'])
+                    .orderBy('pendingSince', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <p>No tienes inscripciones registradas</p>
+                        <a href="inscripcion.html" class="btn-primary" style="display: inline-block; margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.85rem;">➕ Crear primera inscripción</a>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                for (const doc of snapshot.docs) {
+                    const data = doc.data();
+
+                    const estadoClass = data.estadoPago === 'paid' ? 'badge-paid' : 'badge-pending';
+                    const estadoText = data.estadoPago === 'paid' ? 'Pagado' : 'Pendiente';
+                    const relacion = data.tipoParticipante === 'yo' ? '👤 Yo' :
+                        (data.tipoParticipante === 'familiar' ? '👨‍👩‍👧 Familiar' : '👥 Amigo');
+
+                    const div = document.createElement('div');
+                    div.className = 'inscripcion-card';
+                    div.innerHTML = `
+                        <div class="inscripcion-header">
+                            <span class="inscripcion-nombre">${relacion}: ${data.participanteNombre || data.nombre}</span>
+                            <span class="badge ${estadoClass}">${estadoText}</span>
+                        </div>
+                        <div class="inscripcion-body">
+                            <div class="inscripcion-row">
+                                <span class="inscripcion-label">Folio:</span>
+                                <span class="inscripcion-value">${data.folio || 'N/A'}</span>
+                            </div>
+                            <div class="inscripcion-row">
+                                <span class="inscripcion-label">Distancia:</span>
+                                <span class="inscripcion-value">${data.distanciaNombre || 'N/A'}</span>
+                            </div>
+                            <div class="inscripcion-row">
+                                <span class="inscripcion-label">Total:</span>
+                                <span class="inscripcion-value">$${data.total || 0} MXN</span>
+                            </div>
+                            <div class="inscripcion-row">
+                                <span class="inscripcion-label">Extras:</span>
+                                <span class="inscripcion-value">${data.extras?.length || 0}</span>
+                            </div>
+                        </div>
+                        <div class="inscripcion-actions">
+                            ${data.estadoPago === 'pending_payment' ?
+                                `<button class="btn-sm btn-sm-success" onclick="pagarInscripcion('${data.folio}', ${data.total})">💳 Pagar</button>` : ''}
+                            ${data.estadoPago === 'pending_payment' ?
+                                `<button class="btn-sm btn-sm-danger" onclick="confirmarCancelacionInscripcion('${doc.id}')">🗑️ Cancelar</button>` : ''}
+                            <button class="btn-sm btn-sm-info" onclick="verDetalleInscripcion('${doc.id}')">📋 Detalle</button>
+                            ${data.estadoPago === 'paid' ?
+                                `<button class="btn-sm btn-sm-warning" onclick="generarConstancia(${JSON.stringify(data).replace(/"/g, '&quot;')})">📄 Constancia</button>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                }
+            } catch (error) {
+                console.error('Error cargando inscripciones:', error);
+                container.innerHTML = '<p>Error al cargar tus inscripciones. Intenta de nuevo.</p>';
+            }
+        }
+
+        // ============ FUNCIÓN PARA CONFIRMAR CANCELACIÓN ============
+        function confirmarCancelacionInscripcion(id) {
+            console.log('Confirmando cancelación para ID:', id);
+            showConfirmModal(
+                '¿Estás seguro de que deseas cancelar esta inscripción? Esta acción no se puede deshacer.',
+                () => ejecutarCancelacionInscripcion(id)
+            );
+        }
+
+        // ============ EJECUTAR CANCELACIÓN ============
+        async function ejecutarCancelacionInscripcion(id) {
+            console.log('Ejecutando cancelación para ID:', id);
+            
+            if (!id) {
+                console.error('No hay ID de inscripción para cancelar');
+                showNotification('Error: No se encontró el ID de la inscripción', 'error');
+                return;
+            }
+            
+            try {
+                await db.collection('inscripciones').doc(id).update({
+                    estadoPago: 'cancelled',
+                    fechaCancelacion: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showNotification('✅ Inscripción cancelada correctamente', 'success');
+                // Recargar la lista de inscripciones
+                await cargarTodasInscripciones();
+            } catch (error) {
+                console.error('Error al cancelar:', error);
+                showNotification('❌ Error al cancelar la inscripción: ' + error.message, 'error');
+            }
+        }
+
+        // ============ DETALLE DE INSCRIPCIÓN ============
+        async function verDetalleInscripcion(id) {
+            try {
+                const doc = await db.collection('inscripciones').doc(id).get();
+                if (!doc.exists) {
+                    showNotification('No se encontró la inscripción', 'error');
+                    return;
+                }
+
+                const data = doc.data();
+                const horarios = await obtenerHorariosPorDistancia(data.distanciaNombre);
+                const estadoText = data.estadoPago === 'paid' ? 'Pagado' : 'Pendiente de pago';
+                const estadoColor = data.estadoPago === 'paid' ? '#48bb78' : '#ed8936';
+
+                document.getElementById('detailModalTitle').innerHTML = `📋 ${data.participanteNombre || data.nombre}`;
+
+                const content = document.getElementById('detailContent');
+                content.innerHTML = `
+                    <div class="detalle-section">
+                        <h4>🏃 Datos del participante</h4>
+                        <div class="detalle-item"><strong>Nombre:</strong> ${data.participanteNombre || data.nombre}</div>
+                        <div class="detalle-item"><strong>Email:</strong> ${data.email}</div>
+                        <div class="detalle-item"><strong>Teléfono:</strong> ${data.telefono}</div>
+                        <div class="detalle-item"><strong>Talla:</strong> ${data.talla}</div>
+                    </div>
+                    <div class="detalle-section">
+                        <h4>🆘 Contacto de emergencia</h4>
+                        <div class="detalle-item"><strong>Nombre:</strong> ${data.emergencyContact?.nombre || 'N/A'}</div>
+                        <div class="detalle-item"><strong>Teléfono:</strong> ${data.emergencyContact?.telefono || 'N/A'}</div>
+                    </div>
+                    <div class="detalle-section">
+                        <h4>🎽 Detalles de la carrera</h4>
+                        <div class="detalle-item"><strong>Folio:</strong> ${data.folio}</div>
+                        <div class="detalle-item"><strong>Distancia:</strong> ${data.distanciaNombre}</div>
+                        <div class="detalle-item"><strong>Estado:</strong> <span style="color: ${estadoColor}">${estadoText}</span></div>
+                        <div class="detalle-item"><strong>Salida:</strong> ${horarios?.salida || '8:00 AM'}</div>
+                        <div class="detalle-item"><strong>Premiación:</strong> ${horarios?.premiacion || '10:00 AM'}</div>
+                    </div>
+                    <div class="detalle-section">
+                        <h4>🎁 Extras contratados</h4>
+                        ${data.extras && data.extras.length > 0 ?
+                            data.extras.map(e => `<div class="detalle-item"><span>${e.name}</span><span>$${e.price} MXN</span></div>`).join('') :
+                            '<div class="detalle-item">No hay extras contratados</div>'}
+                        <div class="detalle-total">Total: $${data.total || 0} MXN</div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                        ${data.estadoPago === 'pending_payment' ?
+                            `<button class="btn-success" style="flex:1; padding:0.5rem;" onclick="pagarInscripcion('${data.folio}', ${data.total}); closeModal('detailModal');">💳 Pagar</button>` : ''}
+                        ${data.estadoPago === 'paid' ?
+                            `<button class="btn-primary" style="flex:1; padding:0.5rem;" onclick="generarConstancia(${JSON.stringify(data).replace(/"/g, '&quot;')});">📄 Constancia</button>` : ''}
+                        ${data.estadoPago === 'pending_payment' ?
+                            `<button class="btn-danger" style="flex:1; padding:0.5rem;" onclick="confirmarCancelacionInscripcion('${id}'); closeModal('detailModal');">🗑️ Cancelar</button>` : ''}
+                        <button class="btn-secondary" onclick="closeModal('detailModal')">Cerrar</button>
+                    </div>
+                `;
+                document.getElementById('detailModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error al cargar detalle:', error);
+                showNotification('Error al cargar el detalle', 'error');
+            }
+        }
+
+        // ============ ACCIONES ============
+        function pagarInscripcion(folio, total) {
+            window.location.href = `pago.html?folio=${folio}&total=${total}`;
+        }
+
+        // ============ FUNCIONES DE USUARIO ============
+        function updateUserUI(user) {
+            if (user) {
+                currentUser = user;
+                userBadge.style.display = 'flex';
+                userNameDisplay.textContent = user.displayName || user.email.split('@')[0];
+                userAvatar.src = user.photoURL || `https://ui-avatars.com/api/?background=0d3b66&color=fff&name=${encodeURIComponent(user.displayName || 'U')}`;
+                showMainContent();
+                loadUserData(user);
+                cargarTodasInscripciones();
+            } else {
+                window.location.href = 'login.html';
+            }
+            hideLoading();
+        }
+
+        function loadUserData(user) {
+            document.getElementById('email-participante').textContent = user.email;
+            document.getElementById('nombre-participante').textContent = user.displayName || 'No especificado';
+            loadUserProfile(user.uid);
+        }
+
+        async function loadUserProfile(uid) {
+            try {
+                const doc = await db.collection('users').doc(uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.telefono) document.getElementById('telefono-participante').textContent = data.telefono;
+                    if (data.talla) document.getElementById('talla-participante').textContent = data.talla;
+                }
+            } catch (error) { console.error('Error cargando perfil:', error); }
+        }
+
+        // ============ UI ============
+        function hideLoading() { loadingScreen.style.display = 'none'; }
+        function showMainContent() { mainContent.style.display = 'block'; }
+
+        function openEditModal() {
+            document.getElementById('edit-nombre').value = document.getElementById('nombre-participante').textContent;
+            document.getElementById('edit-telefono').value = document.getElementById('telefono-participante').textContent;
+            document.getElementById('edit-talla').value = document.getElementById('talla-participante').textContent;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) { const modal = document.getElementById(modalId); if (modal) modal.style.display = 'none'; }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `position:fixed;bottom:20px;right:20px;padding:10px 15px;background:${type === 'success' ? '#48bb78' : '#f56565'};color:white;border-radius:8px;z-index:10000;font-size:0.85rem;`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        function shareOnWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent('¡Hola! Me he inscrito en RUN4PAZ 🏃‍♂️\n¡Nos vemos en la meta! 🎉')}`, '_blank'); }
+        function addToCalendar() { window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('RUN4PAZ - Carrera por la paz')}&dates=20250615T080000/20250615T120000&location=${encodeURIComponent('Parque Metropolitano')}`, '_blank'); }
+        
+        async function logout() { 
+            try { 
+                await auth.signOut(); 
+                window.location.href = 'login.html'; 
+            } catch (error) { 
+                console.error('Error:', error); 
+            } 
+        }
+        
+        function toggleUserMenu() { 
+            if (userMenu) userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block'; 
+        }
+
+        // ============ EVENTOS ============
+        document.getElementById('userBadge')?.addEventListener('click', toggleUserMenu);
+        document.getElementById('logoutBtn')?.addEventListener('click', logout);
+
+        document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    telefono: document.getElementById('edit-telefono').value,
+                    talla: document.getElementById('edit-talla').value
+                });
+                closeModal('editModal');
+                showNotification('Datos actualizados', 'success');
+                setTimeout(() => location.reload(), 1500);
+            } catch (error) { showNotification('Error al actualizar', 'error'); }
+        });
+
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+            if (event.target === userMenu) userMenu.style.display = 'none';
+            if (event.target.classList.contains('confirm-modal')) closeConfirmModal();
+        };
+
+        // Exponer funciones globalmente
+        window.pagarInscripcion = pagarInscripcion;
+        window.confirmarCancelacionInscripcion = confirmarCancelacionInscripcion;
+        window.verDetalleInscripcion = verDetalleInscripcion;
+        window.generarConstancia = generarConstancia;
+        window.openEditModal = openEditModal;
+        window.closeModal = closeModal;
+        window.shareOnWhatsApp = shareOnWhatsApp;
+        window.addToCalendar = addToCalendar;
+
+        auth.onAuthStateChanged((user) => { updateUserUI(user); });
+    </script>
+</body>
+
+</html>

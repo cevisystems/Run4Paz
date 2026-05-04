@@ -1,552 +1,788 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Run4Paz</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>RUN4PAZ - Corre por la paz, corre por un mejor futuro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <meta name="description" content="Carrera RUN4PAZ - Promovemos la paz, la unión y el bienestar a través del deporte">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ========== VARIABLES CSS ========== */
+        :root {
+            --primary: #0d3b66;
+            --primary-dark: #1a5a8c;
+            --secondary: #4CAF50;
+            --accent: #f59e0b;
+            --gray-light: #f7fafc;
+            --gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-gray: #4a5568;
+            --text-light: #718096;
+            --white: #ffffff;
+            --border-radius-sm: 12px;
+            --border-radius-md: 20px;
+            --border-radius-lg: 50px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
+        /* ========== RESET ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+        /* ========== UTILIDADES ========== */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+        .text-center { text-align: center; }
+        .text-primary { color: var(--primary); }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .d-flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .align-center { align-items: center; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+        .w-100 { width: 100%; }
+
+        /* Enlace del mapa */
+        .map-link {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .map-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
         }
 
-        /* HEADER */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 10px 20px;
+        /* ========== BARRA SUPERIOR ========== */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            position: relative;
+            z-index: 1001;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            height: 55px;
-        }
-
-        header a {
-            color: #0d3b66;
-            text-decoration: none;
-            margin-left: 15px;
-            font-weight: 500;
-        }
-
-        /* HERO */
-        .hero {
-            height: 100vh;
-            background:
-                linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.75)),
-                url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5') no-repeat center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .hero-logo {
-            width: 300px;
-            margin-bottom: 25px;
-            background: white;
-            padding: 18px;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(30px) scale(0.9);
-            animation: fadeInLogo 1s ease forwards;
-        }
-
-        @keyframes fadeInLogo {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            color: #0d3b66;
-        }
-
-        .hero p {
-            font-size: 1.4rem;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        .counter {
-            font-size: 2rem;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* BOTONES */
-        .btn {
-            background: linear-gradient(45deg, #0d3b66, #4CAF50);
-            padding: 15px 30px;
-            border-radius: 30px;
+        
+        .social-icons { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        
+        .social-icon {
             color: white;
             text-decoration: none;
-            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .social-icon:hover { transform: translateY(-2px); color: var(--accent); background: rgba(255,255,255,0.2); }
+        .social-icon span { font-size: 0.75rem; }
+        
+        .contact-info { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .contact-info a:hover { color: var(--accent); background: rgba(255,255,255,0.2); }
+
+        /* ========== HEADER ========== */
+        header {
+            padding: 0.8rem 5%;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo { display: flex; align-items: center; gap: 0.5rem; }
+        .logo img { width: 75px; height: 75px; transition: var(--transition); }
+        .logo img:hover { transform: scale(1.05); }
+        .logo span {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        nav { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+            font-size: 1rem;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            transition: width 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+        nav a:hover { color: var(--primary); }
+        
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--primary); padding: 0.5rem; transition: var(--transition); }
+        .menu-toggle:hover { color: var(--accent); }
+
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.85)), url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 4rem 5%;
+        }
+        
+        .hero-content { max-width: 900px; width: 100%; }
+        
+        .hero-logo {
+            width: 280px;
+            height: 280px;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 0.8s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero h1 { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; line-height: 1.2; }
+        .hero p { font-size: 1.3rem; color: var(--text-gray); margin-bottom: 2rem; }
+        
+        .event-details { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        
+        .detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--white);
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .detail .icon { font-size: 1.3rem; }
+        .counter { font-size: 1.3rem; font-weight: 600; color: var(--primary); margin-bottom: 2rem; }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
             display: inline-block;
-            margin-top: 15px;
-            transition: .3s;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: var(--shadow-md);
         }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
+        
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(13,59,102,0.3); }
+        
         .btn-secondary {
-            background: #eee;
-            color: #0d3b66;
+            display: inline-block;
+            background: transparent;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
         }
+        
+        .btn-secondary:hover { transform: translateY(-3px); background: var(--primary); color: var(--white); box-shadow: var(--shadow-md); }
 
-        /* SECTIONS */
-        .section {
-            padding: 80px 20px;
+        /* ========== SECCIÓN DE CAUSA ========== */
+        .cause-section {
+            padding: 5rem 5%;
+            background: var(--gray-light);
             text-align: center;
-            background: #f5f5f5;
-        }
-
-        .benefits {
-            padding: 80px 20px;
-            text-align: center;
-            background: white;
-        }
-
-        .access {
-            background: #e8f5e9;
-            padding: 80px 20px;
-            text-align: center;
-        }
-
-        /* Scroll margin general para todas las secciones con ID */
-        section[id] {
             scroll-margin-top: 80px;
         }
-
-        /* INFO CARRERA */
-        .info-carrera {
-            padding: 60px 20px;
-            background: #f0f4f8;
-            text-align: center;
+        
+        .cause-section h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
-
-        .info-detalles {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-        }
-
-        .info-detalles div {
-            background: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            min-width: 160px;
-        }
-
-        .info-detalles strong {
-            display: block;
+        
+        .cause-section .subtitle {
             font-size: 1.1rem;
-            color: #0d3b66;
-            margin-bottom: 5px;
-        }
-
-        /* MAPA */
-        .mapa-container {
-            margin-top: 40px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
         }
-
-        .mapa-container iframe {
+        
+        .cause-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .cause-video {
             width: 100%;
-            height: 400px;
-            border: none;
+            height: auto;
             display: block;
         }
+        
+        .cause-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .cause-info {
+            background: var(--white);
+            padding: 2rem;
+            text-align: left;
+        }
+        
+        .cause-info h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .cause-info p {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .cause-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+        
+        .cause-stat {
+            text-align: center;
+        }
+        
+        .cause-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .cause-stat .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
 
-        /* CAUSA */
-        .cause {
+        /* ========== BENEFICIOS ========== */
+        .benefits { padding: 5rem 5%; text-align: center; background: var(--white); }
+        .benefits h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 2.5rem; }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .benefit-card {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: var(--border-radius-md);
+            transition: var(--transition);
+        }
+        
+        .benefit-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); background: var(--white); }
+        .benefit-card .icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
+        .benefit-card h3 { font-size: 1.4rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .benefit-card p { color: var(--text-light); }
+
+        /* ========== MAPA ========== */
+        .map-section { 
+            padding: 4rem 5%; 
+            background: var(--gray-light); 
+            text-align: center;
+            scroll-margin-top: 80px;
+        }
+        .map-section h2 { font-size: 2rem; color: var(--primary); margin-bottom: 1.5rem; }
+        .map-container { max-width: 1000px; margin: 0 auto; border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); }
+        .map-container iframe { width: 100%; height: 450px; border: 0; }
+
+        /* ========== DONACIONES ========== */
+        .donation-section { padding: 4rem 5%; text-align: center; background: var(--white); }
+        .donation-section h2 { font-size: 2rem; color: var(--primary); margin-bottom: 1.5rem; }
+        .progress-container { max-width: 600px; margin: 0 auto 1.5rem; }
+        .progress-bar { background: var(--gray); border-radius: 10px; overflow: hidden; height: 25px; }
+        .progress-fill { background: linear-gradient(135deg, var(--secondary), #45a049); width: 0%; height: 100%; transition: width 0.5s ease; }
+        .progress-container p { margin-top: 0.8rem; font-size: 1.1rem; color: var(--text-dark); }
+        .progress-container .goal { color: var(--text-light); font-size: 0.9rem; }
+
+        /* ========== PATROCINADORES CON SLIDER ========== */
+        .sponsors {
+            padding: 4rem 5%;
+            text-align: center;
+            background: var(--gray-light);
+            overflow: hidden;
+        }
+        .sponsors h2 { font-size: 2rem; color: var(--primary); margin-bottom: 2rem; }
+        
+        .sponsor-slider {
+            width: 100%;
+            overflow: hidden;
             position: relative;
-            height: 70vh;
+        }
+        
+        .sponsor-track {
+            display: flex;
+            width: fit-content;
+            gap: 3rem;
+            cursor: pointer;
+        }
+        
+        .sponsor-item {
+            flex: 0 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            color: white;
-            overflow: hidden;
         }
-
-        .cause video {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cause::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .cause-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* DONACION */
-        .donation {
-            padding: 80px 20px;
-            text-align: center;
-            background: white;
-        }
-
-        .progress-bar {
-            width: 80%;
-            max-width: 500px;
-            margin: 20px auto;
-            background: #ddd;
-            border-radius: 20px;
-            overflow: hidden;
-            height: 20px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 40%;
-            background: linear-gradient(45deg, #0d3b66, #4CAF50);
-        }
-
-        /* CAROUSEL */
-        .carousel {
-            max-width: 900px;
-            margin: auto;
-            overflow: hidden;
-        }
-
-        .slides {
-            display: flex;
-            transition: transform .5s;
-        }
-
-        .slide {
-            min-width: 100%;
-        }
-
-        .slide iframe {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-            border: none;
-        }
-
-        /* SPONSORS */
-        .sponsors {
-            padding: 100px 0;
-            background: #fff;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .sponsor-wrapper {
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .sponsor-track {
-            display: flex;
-            width: max-content;
-            animation: scroll 25s linear infinite;
-        }
-
-        .sponsor {
-            flex: 0 0 auto;
-            margin: 0 60px;
-        }
-
-        .sponsor img {
-            max-width: 150px;
+        
+        .sponsor-item img {
+            width: 150px;
+            height: auto;
+            transition: var(--transition);
             opacity: 0.7;
-            transition: .3s;
         }
-
-        .sponsor img:hover {
-            opacity: 1;
+        
+        .sponsor-item img:hover {
             transform: scale(1.1);
+            opacity: 1;
         }
-
-        @keyframes scroll {
-            from {
-                transform: translateX(0);
-            }
-
-            to {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* FORM */
-        .form-section {
-            background: #0d3b66;
+        
+        /* ========== FOOTER ========== */
+        footer { background: var(--primary); color: white; padding: 3rem 5% 1rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .footer-section h4 { font-size: 1.2rem; margin-bottom: 1rem; color: var(--secondary); }
+        .footer-section p, .footer-section a { color: rgba(255,255,255,0.8); text-decoration: none; display: block; margin-bottom: 0.5rem; transition: color 0.3s; }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-social { margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+        .footer-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            text-decoration: none;
             color: white;
-            padding: 80px 20px;
-            text-align: center;
+            font-size: 1.3rem;
+            transition: var(--transition);
         }
+        .footer-social a:hover { background: var(--accent); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
 
-        form {
-            max-width: 400px;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        input,
-        select {
-            padding: 12px;
-            border-radius: 5px;
-            border: none;
-        }
-
-        /* WHATSAPP */
-        .whatsapp {
+        /* ========== WHATSAPP ========== */
+        .whatsapp-float {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: #25D366;
             color: white;
-            font-size: 28px;
-            padding: 15px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            z-index: 999;
-            transition: .3s;
+            font-size: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            z-index: 1000;
         }
+        .whatsapp-float:hover { transform: scale(1.1); background: #20b359; }
 
-        .whatsapp:hover {
-            transform: scale(1.1);
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 992px) {
+            .hero-logo { width: 240px; height: 240px; }
+            .hero h1 { font-size: 2.5rem; }
+            .sponsor-item img { width: 120px; }
+            .sponsor-track { gap: 2rem; }
         }
-
-        /* MOBILE */
-        @media(max-width:768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .slide iframe {
-                height: 250px;
-            }
-
-            .hero-logo {
-                width: 200px;
-            }
-
-            .info-detalles div {
-                min-width: 130px;
-            }
-
-            .mapa-container iframe {
-                height: 250px;
-            }
+        
+        @media (max-width: 768px) {
+            .top-bar { flex-direction: column; text-align: center; }
+            .social-icons, .contact-info { justify-content: center; }
+            .social-icon span { display: none; }
+            .menu-toggle { display: block; }
+            nav { display: none; width: 100%; flex-direction: column; gap: 0.5rem; padding: 1rem 0; }
+            nav.show { display: flex; }
+            nav a { width: 100%; text-align: center; padding: 0.8rem; border-bottom: 1px solid var(--gray); }
+            .logo img { width: 50px; height: 50px; }
+            .logo span { font-size: 1.3rem; }
+            .hero { background-attachment: scroll; padding: 3rem 5%; }
+            .hero-logo { width: 220px; height: 220px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 1rem; }
+            .event-details { gap: 0.8rem; }
+            .detail { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+            .detail .icon { font-size: 1rem; }
+            .btn-primary, .btn-secondary { padding: 0.8rem 1.5rem; font-size: 0.9rem; }
+            .btn-group { gap: 0.8rem; }
+            .benefits-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .map-container iframe { height: 250px; }
+            .sponsor-item img { width: 80px; }
+            .sponsor-track { gap: 1.5rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-social { justify-content: center; }
+            .whatsapp-float { width: 50px; height: 50px; font-size: 1.6rem; }
+            .cause-stats { gap: 1rem; }
+            .cause-stat .number { font-size: 1.5rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-logo { width: 180px; height: 180px; }
+            .hero h1 { font-size: 1.5rem; }
+            .hero p { font-size: 0.9rem; }
+            .sponsor-item img { width: 65px; }
+            .btn-primary, .btn-secondary { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
+            .benefits h2, .map-section h2, .donation-section h2, .sponsors h2, .cause-section h2 { font-size: 1.6rem; }
+            .cause-stat .number { font-size: 1.2rem; }
+            .cause-stat .label { font-size: 0.7rem; }
         }
     </style>
 </head>
-
 <body>
-
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Logo Run4Paz">
-            <strong style="color:#0d3b66;">Run4Paz</strong>
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <div class="social-icons">
+            <a href="https://facebook.com/run4paz" target="_blank" class="social-icon">📘 <span>Facebook</span></a>
+            <a href="https://instagram.com/run4paz" target="_blank" class="social-icon">📸 <span>Instagram</span></a>
+            <a href="https://twitter.com/run4paz" target="_blank" class="social-icon">🐦 <span>Twitter</span></a>
+            <a href="https://tiktok.com/@run4paz" target="_blank" class="social-icon">🎵 <span>TikTok</span></a>
+            <a href="https://youtube.com/run4paz" target="_blank" class="social-icon">📺 <span>YouTube</span></a>
         </div>
-        <nav>
-            <a href="#">Inicio</a>
-            <a href="#registro">Registro</a>
+        <div class="contact-info">
+            <a href="mailto:info@run4paz.com">✉️ info@run4paz.com</a>
+            <a href="tel:+521234567890">📞 55 1234 5678</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo"><img src="images/logo.png" alt="RUN4PAZ"><span>RUN4PAZ</span></div>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <nav id="mainNav">
+            <a href="index.html">Inicio</a>
+            <a href="inscripcion.html">Inscríbete</a>
+            <a href="panel.html">Mi cuenta</a>
         </nav>
     </header>
 
-    <!-- HERO -->
+    <!-- Hero -->
     <section class="hero">
-        <img src="logo.png" alt="Logo" class="hero-logo">
-        <h1>Carrera Run4Paz 2027</h1>
-        <p>Corre. Ayuda. Transforma vidas.</p>
-
-        <div class="counter" id="counter">0 inscritos</div>
-
-        <div>
-            <a href="#registro" class="btn">Inscribirme ahora</a>
-            <a href="#inclusion" class="btn btn-secondary">Ver causa</a>
+        <div class="hero-content">
+            <img src="images/logo.png" alt="RUN4PAZ" class="hero-logo">
+            <h1>Corre por la paz,<br>corre por un mejor futuro</h1>
+            <p>Únete a la carrera que promueve la paz, la unión y el bienestar</p>
+            <div class="event-details">
+                <div class="detail"><span class="icon">📅</span><span>15 de junio, 2025</span></div>
+                <div class="detail">
+                    <span class="icon">📍</span>
+                    <a href="#mapa" class="map-link">Parque Metropolitano</a>
+                </div>
+                <div class="detail"><span class="icon">🏃</span><span>3K - 5K - 10K</span></div>
+            </div>
+            <div class="counter" id="counter">Cargando inscritos...</div>
+            <div class="btn-group">
+                <a href="inscripcion.html" class="btn-primary">Inscríbete ahora</a>
+                <a href="#causa" class="btn-secondary">Ver causa</a>
+            </div>
         </div>
     </section>
 
-    <!-- BENEFICIOS -->
-    <section class="benefits">
-        <h2>¿Por qué correr con nosotros?</h2>
-        <p>✔ Apoyas a niños con discapacidad visual</p>
-        <p>✔ Vives una experiencia única</p>
-    </section>
-
-    <!-- ACCESO - "Inclusión para todos" -->
-    <section class="access" id="inclusion">
-        <h2>Inclusión para todos</h2>
-        <p>Contamos con guías especializados</p>
-
-
-        <!-- CAUSA -->
-        <section class="cause" id="cause">
-            <video autoplay muted loop playsinline>
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4">
+    <!-- SECCIÓN DE CAUSA SOCIAL -->
+    <section class="cause-section" id="causa">
+        <h2>💛 Cada paso cambia vidas</h2>
+        <p class="subtitle">Con tu participación, apoyamos a niños y niñas con discapacidad visual para que puedan acceder a educación, deporte y oportunidades.</p>
+        
+        <div class="cause-container">
+            <!-- Video de la causa (puedes reemplazar por una imagen) -->
+            <video class="cause-video" autoplay muted loop playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
             </video>
-            <div class="cause-content">
-                <h2>💛 Cada paso cambia vidas</h2>
-            </div>
-        </section>
-
-    </section>
-
-    <!-- ✅ NUEVA SECCIÓN: Detalles del evento + Mapa -->
-    <section class="info-carrera">
-        <h2>📅 Detalles del evento</h2>
-        <div class="info-detalles">
-            <div><strong>🗓️ Fecha:</strong> 15 de mayo, 2027</div>
-            <div><strong>⏰ Hora:</strong> 8:00 AM</div>
-            <div><strong>📍 Lugar:</strong> Parque Metropolitano</div>
-            <div><strong>💰 Costo:</strong> $250 MXN</div>
-        </div>
-
-        <!-- Mapa interactivo de Google Maps -->
-        <div class="mapa-container">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.567529465562!2d-99.137550684905!3d19.42939698689397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff2c42e293d3%3A0xfdc004a064199d5e!2sParque%20Metropolitano%20de%20Pachuca!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-    </section>
-
-    <!-- DONACION -->
-    <section class="donation">
-        <h2>Meta de donación</h2>
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-        <p>$20,441 recaudados</p>
-        <a href="#" class="btn">Donar ahora</a>
-    </section>
-
-    <!-- EXPERIENCIAS -->
-    <section class="section">
-        <h2>Experiencias reales</h2>
-        <div class="carousel">
-            <div class="slides" id="slides">
-                <div class="slide">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>
-                </div>
-                <div class="slide">
-                    <iframe src="https://www.youtube.com/embed/3GwjfUFyY6M"></iframe>
+            
+            <div class="cause-info">
+                <h3>¿Por qué corremos?</h3>
+                <p>En México, más de 500,000 niños viven con discapacidad visual. Muchos de ellos no tienen acceso a educación inclusiva, programas deportivos o terapias especializadas. RUN4PAZ nace para cambiar esta realidad.</p>
+                <p>Con cada kilómetro recorrido, con cada inscripción, estamos construyendo un futuro más inclusivo. Los fondos recaudados se destinan a:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-gray);">
+                    <li>📚 Becas educativas para niños con discapacidad visual</li>
+                    <li>🏃‍♂️ Programas deportivos adaptados</li>
+                    <li>🩺 Atención oftalmológica y terapias</li>
+                    <li>📱 Tecnología de apoyo para la inclusión</li>
+                </ul>
+                
+                <div class="cause-stats">
+                    <div class="cause-stat">
+                        <div class="number">500+</div>
+                        <div class="label">Niños apoyados</div>
+                    </div>
+                    <div class="cause-stat">
+                        <div class="number">15</div>
+                        <div class="label">Escuelas beneficiadas</div>
+                    </div>
+                    <div class="cause-stat">
+                        <div class="number">$250K</div>
+                        <div class="label">Recaudados 2024</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SPONSORS -->
+    <!-- Beneficios -->
+    <section class="benefits">
+        <h2>¿Por qué correr RUN4PAZ?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card"><span class="icon">🏆</span><h3>Medalla conmemorativa</h3><p>Para todos los participantes</p></div>
+            <div class="benefit-card"><span class="icon">❤️</span><h3>Apoyo a causa social</h3><p>Ayudamos a niños con discapacidad visual</p></div>
+            <div class="benefit-card"><span class="icon">🎽</span><h3>Kit de corredor</h3><p>Playera técnica y número de corredor</p></div>
+        </div>
+    </section>
+
+    <!-- Mapa (con ID para el enlace) -->
+    <section class="map-section" id="mapa">
+        <h2>📍 Ubicación del evento</h2>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.567529465562!2d-99.137550684905!3d19.42939698689397!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff2c42e293d3%3A0xfdc004a064199d5e!2sParque%20Metropolitano%20de%20Pachuca!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <!-- Donaciones -->
+    <section class="donation-section">
+        <h2>Meta de donación 2025</h2>
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+            <p id="recaudado">$0 recaudados</p>
+            <p class="goal">Meta: $100,000 MXN</p>
+        </div>
+        <button class="btn-primary" onclick="window.location.href='donacion.html'">Donar ahora</button>
+    </section>
+
+    <!-- Patrocinadores CON SLIDER CON PAUSA -->
     <section class="sponsors">
         <h2>Patrocinadores</h2>
-        <div class="sponsor-wrapper">
-            <div class="sponsor-track">
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
-                        alt="Nike"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"
-                        alt="Adidas"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
-                        alt="Microsoft"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
-                        alt="Apple"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
-                        alt="Nike"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"
-                        alt="Adidas"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
-                        alt="Microsoft"></div>
-                <div class="sponsor"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
-                        alt="Apple"></div>
+        <div class="sponsor-slider">
+            <div class="sponsor-track" id="sponsorTrack">
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" alt="Adidas"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" alt="Adidas"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple"></div>
+                <div class="sponsor-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft"></div>
             </div>
         </div>
     </section>
 
-    <!-- FORM -->
-    <section class="form-section" id="registro">
-        <h2>Registro</h2>
-        <form>
-            <input type="text" placeholder="Nombre completo">
-            <input type="email" placeholder="Correo">
-            <select>
-                <option>5K</option>
-                <option>10K</option>
-            </select>
-            <button type="button" class="btn"
-                onclick="alert('Gracias por registrarte. Pronto recibirás un correo de confirmación.')">Registrarme</button>
-        </form>
-    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>RUN4PAZ</h4>
+                <p>Corriendo por un mejor futuro</p>
+                <div class="footer-social">
+                    <a href="https://facebook.com/run4paz" target="_blank">📘</a>
+                    <a href="https://instagram.com/run4paz" target="_blank">📸</a>
+                    <a href="https://twitter.com/run4paz" target="_blank">🐦</a>
+                    <a href="https://tiktok.com/@run4paz" target="_blank">🎵</a>
+                    <a href="https://youtube.com/run4paz" target="_blank">📺</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>Email: info@run4paz.com</p>
+                <p>Tel: 55 1234 5678</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Aviso de privacidad</a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 RUN4PAZ - Todos los derechos reservados</p></div>
+    </footer>
 
-    <!-- WHATSAPP -->
-    <a href="https://wa.me/5210000000000" class="whatsapp">💬</a>
+    <a href="https://wa.me/521234567890?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20de%20RUN4PAZ" class="whatsapp-float" target="_blank">💬</a>
 
     <script>
-        let count = 500;
-        setInterval(() => {
-            count += Math.floor(Math.random() * 5) + 1;
-            document.getElementById('counter').innerText = count + ' inscritos';
-        }, 1500);
-
-        // carrusel
-        let i = 0;
-        const slides = document.getElementById('slides');
-        const total = slides.children.length;
-
-        setInterval(() => {
-            i = (i + 1) % total;
-            slides.style.transform = `translateX(-${i * 100}%)`;
-        }, 4000);
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('show');
+                menuToggle.textContent = mainNav.classList.contains('show') ? '✕' : '☰';
+            });
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mainNav.classList.remove('show');
+                    menuToggle.textContent = '☰';
+                });
+            });
+        }
+        
+        // Contador de inscritos
+        let count = 1247;
+        const counterElement = document.getElementById('counter');
+        if (counterElement) {
+            counterElement.innerHTML = `🏃‍♂️ ${count.toLocaleString()} corredores inscritos`;
+            setInterval(() => { count += Math.floor(Math.random() * 5) + 1; counterElement.innerHTML = `🏃‍♂️ ${count.toLocaleString()} corredores inscritos`; }, 3000);
+        }
+        
+        // Progreso de donación
+        const progressFill = document.getElementById('progress-fill');
+        const recaudadoElement = document.getElementById('recaudado');
+        if (progressFill && recaudadoElement) {
+            let recaudado = 25440;
+            const meta = 100000;
+            progressFill.style.width = (recaudado / meta) * 100 + '%';
+            recaudadoElement.innerText = `$${recaudado.toLocaleString()} recaudados`;
+        }
+        
+        // ========== SLIDER DE PATROCINADORES CON PAUSA ==========
+        const sponsorTrack = document.getElementById('sponsorTrack');
+        if (sponsorTrack) {
+            let currentPosition = 0;
+            let animationId = null;
+            let isPaused = false;
+            let pauseTimeout = null;
+            
+            const getTrackWidth = () => {
+                return sponsorTrack.scrollWidth / 2;
+            };
+            
+            const moveSlider = () => {
+                if (!isPaused) {
+                    currentPosition += 0.5;
+                    const halfWidth = getTrackWidth();
+                    if (currentPosition >= halfWidth) {
+                        currentPosition = 0;
+                    }
+                    sponsorTrack.style.transform = `translateX(-${currentPosition}px)`;
+                }
+                animationId = requestAnimationFrame(moveSlider);
+            };
+            
+            const pauseSlider = () => {
+                isPaused = true;
+                sponsorTrack.style.cursor = 'pointer';
+            };
+            
+            const resumeSlider = () => {
+                if (pauseTimeout) clearTimeout(pauseTimeout);
+                pauseTimeout = setTimeout(() => {
+                    isPaused = false;
+                    sponsorTrack.style.cursor = 'grab';
+                }, 2000);
+            };
+            
+            sponsorTrack.addEventListener('mouseenter', pauseSlider);
+            sponsorTrack.addEventListener('mouseleave', resumeSlider);
+            moveSlider();
+            sponsorTrack.addEventListener('click', () => {
+                pauseSlider();
+                resumeSlider();
+            });
+        }
+        
+        // Smooth scroll para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
-
 </body>
-
 </html>

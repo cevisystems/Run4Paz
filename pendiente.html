@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago pendiente - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .pending-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 2rem;
+        }
+        .pending-card {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        .pending-icon {
+            font-size: 5rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .pending-title {
+            color: var(--warning);
+            margin: 1rem 0;
+        }
+        .payment-status {
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+        }
+        .instructions {
+            text-align: left;
+            background: var(--bg-gray);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="pending-container">
+        <div class="pending-card">
+            <div class="pending-icon">⏳</div>
+            <h1 class="pending-title">Pago en proceso</h1>
+            <p>Tu pago está siendo procesado.</p>
+            
+            <div class="payment-status">
+                <strong>Estado:</strong> Pendiente de confirmación<br>
+                <strong>Folio:</strong> <span id="folio-number">-</span>
+            </div>
+
+            <div class="instructions">
+                <h3>📌 Instrucciones:</h3>
+                <ul>
+                    <li>Si pagaste con OXXO, realiza el pago antes de la fecha de vencimiento</li>
+                    <li>La confirmación puede tardar hasta 24 horas en efectivo</li>
+                    <li>Recibirás un correo cuando el pago sea confirmado</li>
+                    <li>Puedes verificar el estado en tu panel de participante</li>
+                </ul>
+            </div>
+
+            <div class="timer" id="timer">
+                00:00
+            </div>
+
+            <div class="action-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+                <a href="panel.html" class="btn-primary">Ir a mi panel</a>
+                <a href="pago.html" class="btn-secondary">Intentar otro método</a>
+            </div>
+
+            <div style="margin-top: 2rem; font-size: 0.85rem; color: var(--text-light);">
+                <p>¿Necesitas ayuda? <a href="https://wa.me/521234567890">Contáctanos por WhatsApp</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const folio = urlParams.get('folio') || localStorage.getItem('run4paz_folio');
+        const paymentType = urlParams.get('type');
+        
+        if (folio) {
+            document.getElementById('folio-number').textContent = folio;
+        }
+        
+        // Timer para redirigir después de 30 segundos
+        let timeLeft = 30;
+        const timerElement = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = `panel.html?folio=${folio}`;
+            }
+        }, 1000);
+        
+        // Verificar estado del pago cada 10 segundos
+        let checkInterval = setInterval(async () => {
+            if (window.app) {
+                const response = await window.app.apiCall('checkPaymentStatus', { folio: folio });
+                if (response.status === 'paid') {
+                    clearInterval(checkInterval);
+                    window.location.href = `exito.html?folio=${folio}`;
+                }
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RUN4PAZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0d3b66, #4CAF50);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            max-width: 450px;
+            width: 100%;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .logo { width: 80px; margin-bottom: 1rem; }
+        h2 { color: #0d3b66; margin-bottom: 0.5rem; }
+        .subtitle { color: #718096; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .btn-google {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .btn-google:hover { border-color: #0d3b66; background: #f7fafc; }
+        .divider {
+            margin: 1.5rem 0;
+            position: relative;
+            text-align: center;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #0d3b66;
+        }
+        .btn-primary {
+            background: #0d3b66;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { background: #1a5a8c; }
+        .register-link {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #718096;
+        }
+        .register-link a { color: #0d3b66; text-decoration: none; font-weight: 600; }
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+            font-size: 0.85rem;
+        }
+        .forgot-password {
+            text-align: right;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .forgot-password a {
+            font-size: 0.8rem;
+            color: #0d3b66;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="images/logo.png" alt="RUN4PAZ" class="logo" onerror="this.src='https://via.placeholder.com/80?text=🏃'">
+        <h2>¡Bienvenido de vuelta!</h2>
+        <p class="subtitle">Inicia sesión para inscribirte en RUN4PAZ</p>
+        
+        <div id="errorMessage" class="error-message"></div>
+        
+        <button id="googleLoginBtn" class="btn-google">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+            Continuar con Google
+        </button>
+        
+        <div class="divider">
+            <span>o con tu correo</span>
+        </div>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="forgot-password">
+                <a href="recuperar.html">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" class="btn-primary">Iniciar sesión</button>
+        </form>
+        
+        <div class="register-link">
+            ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="js/firebase-config.js"></script>
+    <script>
+        const errorDiv = document.getElementById('errorMessage');
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => errorDiv.style.display = 'none', 5000);
+        }
+        
+        // Login con Google
+        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+            try {
+                const result = await auth.signInWithPopup(googleProvider);
+                const user = result.user;
+                
+                // Guardar en Firestore si es necesario
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (!userDoc.exists) {
+                    await db.collection('users').doc(user.uid).set({
+                        nombre: user.displayName,
+                        email: user.email,
+                        foto: user.photoURL,
+                        createdAt: new Date(),
+                        registroCompleto: true
+                    });
+                }
+                
+                window.location.href = 'inscripcion.html';
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al iniciar sesión con Google');
+            }
+        });
+        
+        // Login con email
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const result = await auth.signInWithEmailAndPassword(email, password);
+                const user = result.user;
+                
+                if (!user.emailVerified) {
+                    await auth.signOut();
+                    showError('Por favor, verifica tu correo electrónico antes de iniciar sesión');
+                    return;
+                }
+                
+                window.location.href = 'inscripcion.html';
+            } catch (error) {
+                console.error('Error:', error);
+                if (error.code === 'auth/user-not-found') {
+                    showError('Usuario no encontrado');
+                } else if (error.code === 'auth/wrong-password') {
+                    showError('Contraseña incorrecta');
+                } else if (error.code === 'auth/invalid-email') {
+                    showError('Correo electrónico inválido');
+                } else {
+                    showError('Error al iniciar sesión');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
